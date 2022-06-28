@@ -5,7 +5,7 @@ public class Screen {
     public int[][] map;
     public int mapWidth, mapHeight, width, height;
     public ArrayList<Texture> textures;
-    private final ArrayList<Chunk> chunks = new ArrayList<>();
+    public final static ArrayList<Chunk> chunks = new ArrayList<>();
 
     public Screen(int[][] m, int mapW, int mapH, ArrayList<Texture> tex, int w, int h) {
         map = m;
@@ -85,13 +85,13 @@ public class Screen {
                 //Check if ray has hit a wall
                 //System.out.println(mapX + ", " + mapY + ", " + map[mapX][mapY]);
                 try {
-                    if (FindChunk(mapX/16, mapY/16).getType(mapX%16, mapY%16) <= 3 || !(mapX == 0 && mapY == 0)) hit = true;
+                    if (isSolid(mapX, mapY)) hit = true;
                 } catch (java.lang.ArrayIndexOutOfBoundsException e) {
                     break;
                 }
                 distance++;
 
-                if (distance > 75) {
+                if (distance > 32) {
                     break;
                 }
             }
@@ -139,7 +139,7 @@ public class Screen {
         return pixels;
     }
 
-    private Chunk FindChunk(int chunkX, int chunkY) {
+    public static Chunk FindChunk(int chunkX, int chunkY) {
         for (Chunk chunk : chunks) {
             if(chunk.getChunkX() == chunkX && chunk.getChunkY() == chunkY) {
                 return chunk;
@@ -148,6 +148,10 @@ public class Screen {
         Chunk chunk = new Chunk(chunkX, chunkY);
         chunks.add(chunk);
         return chunk;
+    }
+
+    public static boolean isSolid(int mapX, int mapY) {
+        return FindChunk(mapX / 16, mapY / 16).getType(mapX % 16, mapY % 16) <= 3;
     }
 
     private boolean doesChunkExist(int chunkX, int chunkY) {

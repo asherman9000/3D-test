@@ -60,17 +60,17 @@ public class Camera implements KeyListener {
     public void update(int[][] map) {
         if (!NOCLIP) {
             if (forward) {
-                if (Noise.setSeed((int) (xPos + xDir * MOVE_SPEED), (int) yPos) > 3 || (xPos == 0 && yPos == 0)) {
+                if (!Screen.isSolid((int) (xPos + xDir * MOVE_SPEED), (int) yPos)) {
                     xPos += xDir * MOVE_SPEED;
                 }
-                if (Noise.setSeed((int) xPos, (int) (yPos + yDir * MOVE_SPEED)) > 3 || (xPos == 0 && yPos == 0))
+                if (!Screen.isSolid((int) xPos, (int) (yPos + yDir * MOVE_SPEED)))
                     yPos += yDir * MOVE_SPEED;
             }
             if (back) {
-                if (Noise.setSeed((int) (xPos - xDir * MOVE_SPEED), (int) yPos) > 3 || (xPos == 0 && yPos == 0)) {
+                if (!Screen.isSolid((int) (xPos - xDir * MOVE_SPEED), (int) yPos)) {
                     xPos -= xDir * MOVE_SPEED;
                 }
-                if (Noise.setSeed((int) xPos, (int) (yPos - yDir * MOVE_SPEED)) > 3 || (xPos == 0 && yPos == 0))
+                if (!Screen.isSolid((int) xPos, (int) (yPos - yDir * MOVE_SPEED)))
                     yPos -= yDir * MOVE_SPEED;
             }
         } else {

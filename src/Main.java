@@ -48,7 +48,7 @@ public class Main extends JFrame implements Runnable{
         textures.add(Texture.bluestone);
         textures.add(Texture.stone);
         //textures.add(Texture.empty);
-        camera = new Camera(0.5, 0.5, 1, 0, 0, -.66);
+        camera = new Camera(1.5, 0.5, 1, 0, 0, -.66);
         screen = new Screen(map, mapWidth, mapHeight, textures, 640, 480);
         addKeyListener(camera);
         setSize(640, 480);
