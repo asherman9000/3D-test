@@ -97,8 +97,10 @@ public class Chunk {
     }
 
     public int getType(int x, int y) {
-        //x = x % 16;
-        //y = y % 16;
+        x = x % 16;
+        y = y % 16;
+        x = 5;
+        y = 4;
         decodeString();
         int tempX = 1;
         int tempY = 1;
@@ -106,24 +108,23 @@ public class Chunk {
         for (int i = 0; i < chunkList.length()-1; i++) {
             char c = chunkList.charAt(i);
             if (c == '_') {
-
                 tempX ++;
-                if (tempX == 17) {
+                if (tempX > 16) {
                     tempY++;
                     tempX = 1;
                 }
                 if (tempX == x && tempY == y) {
                     encodeString();
-                    return Integer.parseInt(num.toString());
+                    return 0; //Integer.parseInt(num.toString());
                 }
                 num = new StringBuilder();
-                continue;
-            }
 
-            num.append(c);
+            } else {
+                num.append(c);
+            }
         }
         encodeString();
-        return 3;
+        return 2;
     }
 
     public int getChunkX() {

@@ -1,14 +1,11 @@
-import perlin.Noise;
-
+import java.awt.*;
 import java.util.ArrayList;
-import java.awt.Color;
 
 public class Screen {
-    private Noise n = new Noise();
     public int[][] map;
     public int mapWidth, mapHeight, width, height;
     public ArrayList<Texture> textures;
-    private ArrayList<Chunk> chunks = new ArrayList<>();
+    private final ArrayList<Chunk> chunks = new ArrayList<>();
 
     public Screen(int[][] m, int mapW, int mapH, ArrayList<Texture> tex, int w, int h) {
         map = m;
@@ -68,8 +65,8 @@ public class Screen {
             }
             int distance = 0;
             //Loop to find where the ray hits a wall
-            if (!doesChunkExist((int) Math.floor(mapX/16), (int) Math.floor(mapY/16))) {
-                chunks.add(new Chunk((int) Math.floor(mapX/16), (int) Math.floor(mapY/16)));
+            if (!doesChunkExist(mapX/16, mapY/16)) {
+                chunks.add(new Chunk(mapX/16, mapY/16));
             }
             while(!hit) {
                 //Jump to next square
@@ -88,7 +85,7 @@ public class Screen {
                 //Check if ray has hit a wall
                 //System.out.println(mapX + ", " + mapY + ", " + map[mapX][mapY]);
                 try {
-                    if (FindChunk((int) Math.floor(mapX/16), (int) Math.floor(mapY/16)).getType(mapX%16, mapY%16) <= 3) hit = true;
+                    if (FindChunk(mapX/16, mapY/16).getType(mapX%16, mapY%16) <= 3 || !(mapX == 0 && mapY == 0)) hit = true;
                 } catch (java.lang.ArrayIndexOutOfBoundsException e) {
                     break;
                 }
@@ -115,7 +112,7 @@ public class Screen {
             if(drawEnd >= height)
                 drawEnd = height - 1;
             //add a texture
-            int texNum = FindChunk((int) Math.floor(mapX/16), (int) Math.floor(mapY/16)).getType(mapX, mapY);
+            int texNum = FindChunk(mapX/16, mapY/16).getType(mapX, mapY);
             if (texNum > 3) {
                 texNum = 0;
             }

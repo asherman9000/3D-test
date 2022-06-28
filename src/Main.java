@@ -42,13 +42,13 @@ public class Main extends JFrame implements Runnable{
         thread = new Thread(this);
         image = new BufferedImage(640, 480, BufferedImage.TYPE_INT_RGB);
         pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
-        textures = new ArrayList<Texture>();
+        textures = new ArrayList<>();
         textures.add(Texture.wood);
         textures.add(Texture.brick);
         textures.add(Texture.bluestone);
         textures.add(Texture.stone);
         //textures.add(Texture.empty);
-        camera = new Camera(4.5, 4.5, 1, 0, 0, -.66);
+        camera = new Camera(0.5, 0.5, 1, 0, 0, -.66);
         screen = new Screen(map, mapWidth, mapHeight, textures, 640, 480);
         addKeyListener(camera);
         setSize(640, 480);
@@ -93,7 +93,7 @@ public class Main extends JFrame implements Runnable{
             lastTime = now;
             while (delta >= 1)//Make sure update is only happening 60 times a second
             {
-                //handles all of the logic restricted time
+                //handles all the logic restricted time
                 screen.update(camera, pixels);
                 camera.update(map);
                 delta--;
