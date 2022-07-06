@@ -1,7 +1,10 @@
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
-public class Screen {
+public class Screen implements KeyListener {
+    private int renderLimit = 2;
     public int[][] map;
     public int mapWidth, mapHeight, width, height;
     public ArrayList<Texture> textures;
@@ -68,6 +71,7 @@ public class Screen {
             if (!doesChunkExist(mapX/16, mapY/16)) {
                 chunks.add(new Chunk(mapX/16, mapY/16));
             }
+            Chunk currentChunk = FindChunk(mapX/16, mapY/16);
             while(!hit) {
                 //Jump to next square
                 if (sideDistX < sideDistY)
@@ -84,14 +88,9 @@ public class Screen {
                 }
                 //Check if ray has hit a wall
                 //System.out.println(mapX + ", " + mapY + ", " + map[mapX][mapY]);
-                try {
-                    if (isSolid(mapX, mapY)) hit = true;
-                } catch (java.lang.ArrayIndexOutOfBoundsException e) {
-                    break;
-                }
-                distance++;
+                if (isSolid(mapX, mapY)) hit = true;
 
-                if (distance > 32) {
+                if (currentChunk.chunkDistance(FindChunk(mapX/16, mapY/16)) >= renderLimit) {
                     break;
                 }
             }
@@ -162,5 +161,23 @@ public class Screen {
         }
 
         return false;
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_P)
+            renderLimit++;
+        if (e.getKeyCode() == KeyEvent.VK_L && renderLimit > 1)
+            renderLimit--;
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
     }
 }

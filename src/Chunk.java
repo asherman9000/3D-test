@@ -7,6 +7,7 @@ public class Chunk {
     private final int chunkY;
     private final ArrayList<Character> alphabet = new ArrayList<>();
     private String chunkList = "";
+    private ArrayList<Integer> chunkArray = new ArrayList<>();
 
     public Chunk(int chunkX, int chunkY) {
         this.chunkX = chunkX;
@@ -21,6 +22,7 @@ public class Chunk {
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
                 chunkList += Noise.setSeed(x, y) + "_";
+                chunkArray.add(Noise.setSeed(x,y));
                 x++;
             }
             x = 16 * chunkX;
@@ -35,7 +37,7 @@ public class Chunk {
         StringBuilder num = new StringBuilder();
         String previousNum = "";
         StringBuilder encoded = new StringBuilder();
-        for (int i = 0; i < chunkList.length()-1; i++) {
+        for (int i = 0; i < chunkList.length() - 1; i++) {
             char c = chunkList.charAt(i);
             if (c == '_') {
                 switch (num.toString()) {
@@ -76,21 +78,21 @@ public class Chunk {
      * Only decode an encoded string
      * Always encode string after decoding
      */
-    private void decodeString()   {
+    private void decodeString() {
         StringBuilder encoded = new StringBuilder();
         int length;
         StringBuilder num = new StringBuilder();
-        for (int i = 0; i < chunkList.length()-1; i++) {
+        for (int i = 0; i < chunkList.length() - 1; i++) {
             char c = chunkList.charAt(i);
-            if (c == 'a'  || c == 'b' || c == 'c' || c == 'd' || c == 'e') {
+            if (c == 'a' || c == 'b' || c == 'c' || c == 'd' || c == 'e') {
                 length = Integer.parseInt(num.toString());
                 for (int j = 0; j < length; j++) {
                     encoded.append(alphabet.indexOf(c)).append("_");
                 }
                 num = new StringBuilder();
-                continue;
+            } else {
+                num.append(c);
             }
-            num.append(c);
         }
 
         chunkList = encoded.toString();
@@ -101,26 +103,37 @@ public class Chunk {
         int tempX = 0;
         int tempY = 0;
         StringBuilder num = new StringBuilder();
-        for (int i = 0; i < chunkList.length()-1; i++) {
-            char c = chunkList.charAt(i);
-            if (c == '_') {
-                tempX ++;
+        for (int i = 0; i < chunkArray.size() - 1; i++) {
+                tempX++;
                 if (tempX == 16) {
                     tempY++;
                     tempX = 1;
                 }
                 if (tempX == x && tempY == y) {
                     //encodeString();
-                    return Integer.parseInt(num.toString())+1;
+                    return chunkArray.get(i);
                 }
-                num = new StringBuilder();
 
-            } else {
-                num.append(c);
-            }
+
         }
-        //encodeString();
-        return 2;
+        return 0;
+    }
+
+    public void changeType(int x, int y, int newType) {
+        int tempX = 0;
+        int tempY = 0;
+        StringBuilder num = new StringBuilder();
+        for (int i = 0; i < chunkArray.size() - 1; i++) {
+            tempX++;
+            if (tempX == 16) {
+                tempY++;
+                tempX = 1;
+            }
+            if (tempX == x && tempY == y) {
+                chunkArray.set(i, newType);
+            }
+
+        }
     }
 
     public int getChunkX() {
@@ -129,5 +142,9 @@ public class Chunk {
 
     public int getChunkY() {
         return chunkY;
+    }
+
+    public int chunkDistance(Chunk chunk) {
+        return Math.abs((this.chunkX - chunk.getChunkX())) + Math.abs((this.chunkY - chunk.getChunkY()));
     }
 }

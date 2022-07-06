@@ -42,6 +42,8 @@ public class Camera implements KeyListener {
             MOVE_SPEED += 0.01;
         if (key.getKeyCode() == KeyEvent.VK_SHIFT)
             MOVE_SPEED -= 0.01;
+        if (key.getKeyCode() == KeyEvent.VK_P)
+            Screen.FindChunk((int) xPos/16, (int) yPos/16).changeType((int) xPos % 16, (int) yPos % 16, 1);
 
     }
 
